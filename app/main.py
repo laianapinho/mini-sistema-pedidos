@@ -1,25 +1,33 @@
-# Importa a classe FastAPI do pacote fastapi.
-# Essa classe fornece todas as funcionalidades para criar sua aplicação Web.
+# Importa a classe principal para criar a aplicação Web
 from fastapi import FastAPI
 
-# Cria uma instância da classe FastAPI.
-# Este objeto 'app' é o coração da sua aplicação, onde as rotas serão registradas.
+# Importa a estrutura do banco (Base) e o motor de conexão (engine)
+from app.database import Base, engine
+# Importa os módulos de rotas que você desenvolveu (Usuários e Produtos)
+from app.routes import products, users
+
+# Este comando verifica seus modelos e cria as tabelas 'users' e 'products' 
+# no banco de dados SQLite caso elas ainda não existam.
+Base.metadata.create_all(bind=engine)
+
+# Inicializa o FastAPI com as informações que aparecerão no cabeçalho da documentação
 app = FastAPI(
-    title="Mini Sistema de Pedidos",                # Nome que aparece na documentação (Swagger).
-    description="API REST para simular um sistema simples de pedidos.", # Descrição detalhada da API.
-    version="1.0.0"                                # Versão atual do seu software.
+    title="Mini Sistema de Pedidos",
+    description="API REST para simular um sistema simples de pedidos.",
+    version="1.0.0"
 )
 
-# O decorador @app.get("/") define uma 'rota'.
-# Ele diz ao servidor: "Quando alguém acessar o endereço raiz ('/') via método GET,
-# execute a função que vem logo abaixo".
+# Registra as rotas de usuários. Endereços como /users/ funcionarão agora.
+app.include_router(users.router)
+
+# Registra as rotas de produtos. Endereços como /products/ funcionarão agora.
+# O FastAPI vai separar esses dois grupos na documentação /docs automaticamente.
+app.include_router(products.router)
+
+# Rota raiz (ponto de entrada) para verificar se o servidor está ligado.
 @app.get("/")
 def home():
-    """
-    Função de boas-vindas.
-    O FastAPI converte automaticamente o dicionário Python abaixo 
-    em um formato JSON, que é o padrão de resposta para APIs.
-    """
+    """Retorna um JSON simples de boas-vindas."""
     return {
         "mensagem": "API do Mini Sistema de Pedidos funcionando!"
     }

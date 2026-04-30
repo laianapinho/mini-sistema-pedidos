@@ -1,30 +1,37 @@
-# Importa os tipos de dados (Inteiro e Texto) e a classe Column do SQLAlchemy
-from sqlalchemy import Column, Integer, String
-
-# Importa a classe Base que configuramos no arquivo database.py
-# Ela é necessária para que o SQLAlchemy "enxergue" esta classe como uma tabela
+from sqlalchemy import Boolean, Column, Float, Integer, String
 from app.database import Base
 
-
+# --- MODELO DE USUÁRIO ---
 class User(Base):
-    """
-    Representa a tabela de usuários no banco de dados.
-    """
-    # Define explicitamente o nome da tabela no banco de dados
+    """Representa a tabela de clientes/usuários do sistema."""
     __tablename__ = "users"
 
-    # Chave Primária: Identificador único de cada usuário.
-    # index=True cria um índice para que buscas por ID sejam instantâneas.
+    id = Column(Integer, primary_key=True, index=True) # Identificador único
+    nome = Column(String, nullable=False)              # Nome obrigatório
+    email = Column(String, unique=True, index=True, nullable=False) # E-mail único
+    telefone = Column(String, nullable=True)           # Telefone opcional
+
+
+# --- MODELO DE PRODUTO ---
+class Product(Base):
+    """
+    Representa a tabela de produtos disponíveis para venda.
+    """
+    # Define o nome da tabela no banco de dados como 'products'
+    __tablename__ = "products"
+
+    # ID do produto: Chave primária para identificar cada item
     id = Column(Integer, primary_key=True, index=True)
 
-    # Nome do usuário: Uma coluna de texto que não pode estar vazia (nullable=False).
+    # Nome do produto: Texto obrigatório (ex: "Pizza de Calabresa")
     nome = Column(String, nullable=False)
 
-    # E-mail:
-    # unique=True: Garante que não existam dois usuários com o mesmo e-mail.
-    # index=True: Otimiza a performance, já que e-mail é muito usado em logins.
-    # nullable=False: Campo obrigatório.
-    email = Column(String, unique=True, index=True, nullable=False)
+    # Descrição: Texto opcional para dar detalhes do produto
+    descricao = Column(String, nullable=True)
 
-    # Telefone: Uma coluna de texto que é opcional (nullable=True).
-    telefone = Column(String, nullable=True)
+    # Preço: Float (número decimal) obrigatório para armazenar o valor
+    preco = Column(Float, nullable=False)
+
+    # Disponível: Booleano (Verdadeiro/Falso). 
+    # Por padrão (default), todo produto novo é criado como disponível (True).
+    disponivel = Column(Boolean, default=True)
