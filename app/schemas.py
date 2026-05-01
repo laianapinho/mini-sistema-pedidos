@@ -1,3 +1,4 @@
+from datetime import datetime
 # BaseModel é a classe base para criar modelos de dados no Pydantic.
 # EmailStr é um tipo especial que valida automaticamente se o texto é um e-mail válido.
 from pydantic import BaseModel, EmailStr, Field
@@ -61,4 +62,29 @@ class ProductResponse(BaseModel):
 
     class Config:
         # Permite converter o objeto do banco (SQLAlchemy) diretamente para este schema
+        from_attributes = True
+
+# --- NOVO: SCHEMAS DE PEDIDO (ORDER) ---
+
+# Schema para CRIAR um pedido
+class OrderCreate(BaseModel):
+    user_id: int       # ID do usuário que está comprando (obrigatório)
+    product_id: int    # ID do produto que está sendo comprado (obrigatório)
+    # gt=0: Garante que ninguém compre 0 ou quantidades negativas de um produto
+    quantidade: int = Field(..., gt=0)
+
+
+# Schema para a RESPOSTA de um pedido
+class OrderResponse(BaseModel):
+    id: int            # Número do pedido gerado pelo banco
+    user_id: int       # ID do dono do pedido
+    product_id: int    # ID do produto solicitado
+    quantidade: int    # Quantidade confirmada
+    valor_total: float # O cálculo final (preco * quantidade) que virá do banco
+    status: str        # Ex: "CRIADO", "PAGO"
+    data_criacao: datetime # Data e hora em que o registro nasceu
+
+    class Config:
+        # Essencial para que o FastAPI consiga ler os dados do modelo 
+        # SQLAlchemy e transformar no formato JSON para o usuário
         from_attributes = True

@@ -53,16 +53,23 @@ mini-sistema-pedidos/
 
 ## Funcionalidades implementadas
 
-- Rota inicial da API;
-- Cadastro de usuários;
-- Listagem de usuários;
-- Busca de usuário por ID;
-- Cadastro de produtos;
-- Listagem de produtos;
-- Busca de produto por ID;
-- Atualização parcial de produto;
-- Validações básicas de dados com Pydantic;
-- Documentação automática com Swagger.
+- Rota inicial da API
+- Cadastro de usuários
+- Listagem de usuários
+- Busca de usuário por ID
+- Cadastro de produtos
+- Listagem de produtos
+- Busca de produto por ID
+- Atualização de produto
+- Criação de pedidos
+- Listagem de pedidos
+- Busca de pedido por ID
+- Cálculo automático do valor total do pedido
+- Validação de usuário existente
+- Validação de produto existente
+- Validação de produto disponível
+- Validações básicas de dados com Pydantic
+- Documentação automática com Swagger
 
 ---
 
@@ -159,6 +166,14 @@ http://127.0.0.1:8000/docs
 | GET | `/products/` | Lista todos os produtos |
 | GET | `/products/{product_id}` | Busca um produto pelo ID |
 | PATCH | `/products/{product_id}` | Atualiza parcialmente um produto |
+
+### Pedidos
+
+| Método | Rota | Descrição |
+|---|---|---|
+| POST | `/orders/` | Cria um pedido |
+| GET | `/orders/` | Lista pedidos |
+| GET | `/orders/{order_id}` | Busca pedido por ID |
 
 ---
 
