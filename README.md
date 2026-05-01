@@ -1,24 +1,10 @@
 # Mini Sistema de Pedidos — API REST
 
-API REST desenvolvida com **Python** e **FastAPI** para simular o fluxo básico de um sistema de pedidos.
-
-O projeto permite cadastrar usuários, cadastrar produtos, listar registros e atualizar informações de produtos. Nas próximas etapas, serão adicionadas as funcionalidades de criação de pedidos, atualização de status, testes automatizados e dockerização.
-
----
+API REST desenvolvida com Python e FastAPI para simular o fluxo básico de um sistema de pedidos.
 
 ## Objetivo
 
-O objetivo deste projeto é praticar conceitos de **Engenharia de Software** e **desenvolvimento backend**, incluindo:
-
-- Criação de APIs REST;
-- Organização de rotas;
-- Modelagem de banco de dados relacional;
-- Validação de dados;
-- Integração com banco SQLite;
-- Documentação automática com Swagger;
-- Boas práticas de estruturação de projeto.
-
----
+O objetivo do projeto é praticar desenvolvimento backend, criação de APIs REST, organização de rotas, banco de dados relacional, validação de dados e documentação automática com Swagger.
 
 ## Tecnologias utilizadas
 
@@ -29,27 +15,6 @@ O objetivo deste projeto é praticar conceitos de **Engenharia de Software** e *
 - Pydantic
 - SQLite
 - Git/GitHub
-
----
-
-## Estrutura do projeto
-
-```txt
-mini-sistema-pedidos/
-├── app/
-│   ├── main.py
-│   ├── database.py
-│   ├── models.py
-│   ├── schemas.py
-│   └── routes/
-│       ├── users.py
-│       ├── products.py
-│       └── orders.py
-├── requirements.txt
-└── README.md
-```
-
----
 
 ## Funcionalidades implementadas
 
@@ -68,27 +33,38 @@ mini-sistema-pedidos/
 - Validação de usuário existente
 - Validação de produto existente
 - Validação de produto disponível
+- Validação de quantidade maior que zero
 - Validações básicas de dados com Pydantic
 - Documentação automática com Swagger
 
----
-
 ## Funcionalidades planejadas
 
-- Criação de pedidos;
-- Listagem de pedidos;
-- Busca de pedido por ID;
-- Cálculo automático do valor total do pedido;
-- Atualização do status do pedido;
-- Testes automatizados com Pytest;
-- Autenticação com JWT;
-- Dockerização da aplicação.
+- Atualização do status do pedido
+- Testes automatizados com Pytest
+- Dockerização da aplicação
+- Autenticação com JWT
 
----
+## Estrutura do projeto
 
-## Como executar o projeto no Linux
+```txt
+mini-sistema-pedidos/
+├── app/
+│   ├── main.py
+│   ├── database.py
+│   ├── models.py
+│   ├── schemas.py
+│   └── routes/
+│       ├── users.py
+│       ├── products.py
+│       └── orders.py
+├── README.md
+├── requirements.txt
+└── .gitignore
+```
 
-### 1. Clonar o repositório
+## Como executar o projeto
+
+Clone o repositório:
 
 ```bash
 git clone URL_DO_REPOSITORIO
@@ -100,47 +76,41 @@ Entre na pasta do projeto:
 cd mini-sistema-pedidos
 ```
 
-### 2. Criar o ambiente virtual
+Crie o ambiente virtual:
 
 ```bash
-python3 -m venv venv
+python -m venv venv
 ```
 
-### 3. Ativar o ambiente virtual
+Ative o ambiente virtual no Linux:
 
 ```bash
 source venv/bin/activate
 ```
 
-### 4. Instalar as dependências
+Instale as dependências:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 5. Executar a aplicação
+Execute a aplicação:
 
 ```bash
 uvicorn app.main:app --reload
 ```
 
-### 6. Acessar a API
-
-Abra no navegador:
+Acesse a API no navegador:
 
 ```txt
 http://127.0.0.1:8000
 ```
 
-### 7. Acessar a documentação Swagger
-
-Abra no navegador:
+Acesse a documentação Swagger:
 
 ```txt
 http://127.0.0.1:8000/docs
 ```
-
----
 
 ## Endpoints
 
@@ -156,7 +126,7 @@ http://127.0.0.1:8000/docs
 |---|---|---|
 | POST | `/users/` | Cadastra um usuário |
 | GET | `/users/` | Lista todos os usuários |
-| GET | `/users/{user_id}` | Busca um usuário pelo ID |
+| GET | `/users/{user_id}` | Busca um usuário por ID |
 
 ### Produtos
 
@@ -164,20 +134,18 @@ http://127.0.0.1:8000/docs
 |---|---|---|
 | POST | `/products/` | Cadastra um produto |
 | GET | `/products/` | Lista todos os produtos |
-| GET | `/products/{product_id}` | Busca um produto pelo ID |
-| PATCH | `/products/{product_id}` | Atualiza parcialmente um produto |
+| GET | `/products/{product_id}` | Busca um produto por ID |
+| PATCH | `/products/{product_id}` | Atualiza dados de um produto |
 
 ### Pedidos
 
 | Método | Rota | Descrição |
 |---|---|---|
 | POST | `/orders/` | Cria um pedido |
-| GET | `/orders/` | Lista pedidos |
-| GET | `/orders/{order_id}` | Busca pedido por ID |
+| GET | `/orders/` | Lista todos os pedidos |
+| GET | `/orders/{order_id}` | Busca um pedido por ID |
 
----
-
-## Exemplos de requisição
+## Exemplos de requisições
 
 ### Criar usuário
 
@@ -202,15 +170,13 @@ http://127.0.0.1:8000/docs
 
 ### Atualizar produto
 
-Para atualizar somente a disponibilidade:
-
 ```json
 {
   "disponivel": false
 }
 ```
 
-Para atualizar somente o preço:
+Também é possível atualizar apenas o preço:
 
 ```json
 {
@@ -218,40 +184,83 @@ Para atualizar somente o preço:
 }
 ```
 
----
+### Criar pedido
 
-## Banco de dados
-
-O projeto utiliza SQLite para facilitar o desenvolvimento inicial.
-
-O arquivo do banco será criado automaticamente na raiz do projeto com o nome:
-
-```txt
-mini_pedidos.db
+```json
+{
+  "user_id": 1,
+  "product_id": 1,
+  "quantidade": 2
+}
 ```
 
----
+Resposta esperada:
 
-## Status do projeto
+```json
+{
+  "id": 1,
+  "user_id": 1,
+  "product_id": 1,
+  "quantidade": 2,
+  "valor_total": 51.8,
+  "status": "CRIADO",
+  "data_criacao": "2026-04-30T00:00:00"
+}
+```
 
-Projeto em desenvolvimento.
+## Regras de negócio
 
-Etapas concluídas:
+- Não é permitido cadastrar usuário com e-mail repetido.
+- Não é permitido criar pedido para usuário inexistente.
+- Não é permitido criar pedido com produto inexistente.
+- Não é permitido criar pedido com produto indisponível.
+- Não é permitido criar pedido com quantidade menor ou igual a zero.
+- O valor total do pedido é calculado automaticamente com base no preço do produto e na quantidade.
+- Todo pedido é criado inicialmente com o status `CRIADO`.
 
-- Configuração inicial da API;
-- Integração com banco SQLite;
-- Cadastro e consulta de usuários;
-- Cadastro, consulta e atualização de produtos.
+## Exemplos de erros tratados
 
-Próxima etapa:
+### Usuário não encontrado
 
-- Implementação da criação e listagem de pedidos.
+```json
+{
+  "detail": "Usuário não encontrado."
+}
+```
 
----
+### Produto não encontrado
 
-## Autora
+```json
+{
+  "detail": "Produto não encontrado."
+}
+```
 
-**Laiana de Pinho Cavalcante**
+### Produto indisponível
 
-- GitHub: laianapinho
-- LinkedIn: laiana-cavalcante
+```json
+{
+  "detail": "Produto indisponível para pedido."
+}
+```
+
+### E-mail já cadastrado
+
+```json
+{
+  "detail": "Já existe um usuário cadastrado com este e-mail."
+}
+```
+
+## Observações
+
+Durante o desenvolvimento, o projeto utiliza SQLite para facilitar a criação e os testes locais. Em uma evolução futura, o banco pode ser migrado para PostgreSQL.
+
+## Próximos passos
+
+- Criar rota para atualizar o status do pedido
+- Adicionar testes automatizados com Pytest
+- Criar Dockerfile e docker-compose.yml
+- Implementar autenticação com JWT
+- Melhorar a organização do projeto em camadas
+```
